@@ -22,7 +22,6 @@ import (
 	"github.com/coze-dev/coze-loop/backend/modules/foundation/pkg/errno"
 	"github.com/coze-dev/coze-loop/backend/modules/foundation/pkg/pswd"
 	"github.com/coze-dev/coze-loop/backend/pkg/errorx"
-	"github.com/coze-dev/coze-loop/backend/pkg/json2"
 	"github.com/coze-dev/coze-loop/backend/pkg/logs"
 )
 
@@ -250,7 +249,7 @@ func (s *GiteeOAuthServiceImpl) exchangeToken(ctx context.Context, code, redirec
 	}
 
 	var tokenResp tokenResponse
-	if err := json2.UnmarshalFromReader(resp.Body, &tokenResp); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
 		return nil, errorx.WrapByCode(err, errno.CommonInternalErrorCode, errorx.WithExtraMsg("unmarshal token response failed"))
 	}
 
@@ -281,7 +280,7 @@ func (s *GiteeOAuthServiceImpl) getUserInfo(ctx context.Context, accessToken str
 	}
 
 	var giteeUser GiteeUserInfo
-	if err := json2.UnmarshalFromReader(resp.Body, &giteeUser); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&giteeUser); err != nil {
 		return nil, errorx.WrapByCode(err, errno.CommonInternalErrorCode, errorx.WithExtraMsg("unmarshal user info failed"))
 	}
 

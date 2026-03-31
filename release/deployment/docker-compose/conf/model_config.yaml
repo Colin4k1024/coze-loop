@@ -4,8 +4,8 @@ models:
     frame: "eino"
     protocol: "ark"
     protocol_config:
-      api_key: "***"
-      model: "***"
+      api_key: "07a0ffe2-58cb-4f52-9688-2f21df5fdc88"
+      model: "ep-20250727204243-snchd"
     param_config:
       param_schemas:
         - name: "temperature"
