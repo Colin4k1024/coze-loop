@@ -17,32 +17,35 @@ import (
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:        db,
-		APIKey:    newAPIKey(db, opts...),
-		Space:     newSpace(db, opts...),
-		SpaceUser: newSpaceUser(db, opts...),
-		User:      newUser(db, opts...),
+		db:         db,
+		APIKey:     newAPIKey(db, opts...),
+		LoginAudit: newLoginAudit(db, opts...),
+		Space:      newSpace(db, opts...),
+		SpaceUser:  newSpaceUser(db, opts...),
+		User:       newUser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	APIKey    aPIKey
-	Space     space
-	SpaceUser spaceUser
-	User      user
+	APIKey     aPIKey
+	LoginAudit loginAudit
+	Space      space
+	SpaceUser  spaceUser
+	User       user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:        db,
-		APIKey:    q.APIKey.clone(db),
-		Space:     q.Space.clone(db),
-		SpaceUser: q.SpaceUser.clone(db),
-		User:      q.User.clone(db),
+		db:         db,
+		APIKey:     q.APIKey.clone(db),
+		LoginAudit: q.LoginAudit.clone(db),
+		Space:      q.Space.clone(db),
+		SpaceUser:  q.SpaceUser.clone(db),
+		User:       q.User.clone(db),
 	}
 }
 
@@ -56,27 +59,30 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:        db,
-		APIKey:    q.APIKey.replaceDB(db),
-		Space:     q.Space.replaceDB(db),
-		SpaceUser: q.SpaceUser.replaceDB(db),
-		User:      q.User.replaceDB(db),
+		db:         db,
+		APIKey:     q.APIKey.replaceDB(db),
+		LoginAudit: q.LoginAudit.replaceDB(db),
+		Space:      q.Space.replaceDB(db),
+		SpaceUser:  q.SpaceUser.replaceDB(db),
+		User:       q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	APIKey    *aPIKeyDo
-	Space     *spaceDo
-	SpaceUser *spaceUserDo
-	User      *userDo
+	APIKey     *aPIKeyDo
+	LoginAudit *loginAuditDo
+	Space      *spaceDo
+	SpaceUser  *spaceUserDo
+	User       *userDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		APIKey:    q.APIKey.WithContext(ctx),
-		Space:     q.Space.WithContext(ctx),
-		SpaceUser: q.SpaceUser.WithContext(ctx),
-		User:      q.User.WithContext(ctx),
+		APIKey:     q.APIKey.WithContext(ctx),
+		LoginAudit: q.LoginAudit.WithContext(ctx),
+		Space:      q.Space.WithContext(ctx),
+		SpaceUser:  q.SpaceUser.WithContext(ctx),
+		User:       q.User.WithContext(ctx),
 	}
 }
 

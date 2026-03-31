@@ -60,7 +60,7 @@ func (s *FoundationOAuthService) GiteeAuthorize(ctx context.Context, c *app.Requ
 		state,
 	)
 
-	c.Redirect(http.StatusFound, authorizeURL)
+	c.Redirect(http.StatusFound, []byte(authorizeURL))
 }
 
 // GiteeCallback handles GET /api/foundation/v1/oauth/gitee/callback
@@ -98,7 +98,7 @@ func (s *FoundationOAuthService) GiteeCallback(ctx context.Context, c *app.Reque
 
 	// Redirect to frontend with user_id as query param
 	frontendURL := fmt.Sprintf("/#/oauth/callback?user_id=%d", userID)
-	c.Redirect(http.StatusFound, frontendURL)
+	c.Redirect(http.StatusFound, []byte(frontendURL))
 }
 
 // OAuthHandler is the global OAuth handler instance
