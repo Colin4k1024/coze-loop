@@ -65,6 +65,11 @@ export interface MGetUserInfoRequest {
 export interface MGetUserInfoResponse {
   user_infos?: user.UserInfoDetail[]
 }
+export interface OAuthGiteeAuthorizeRequest {
+}
+export interface OAuthGiteeAuthorizeResponse {
+  authorize_url?: string,
+}
 /** 用户注册相关接口 */
 export const Register = /*#__PURE__*/createAPI<UserRegisterRequest, UserRegisterResponse>({
   "url": "/api/foundation/v1/users/register",
@@ -112,6 +117,17 @@ export const Logout = /*#__PURE__*/createAPI<LogoutRequest, LogoutResponse>({
     "body": ["token"]
   },
   "resType": "LogoutResponse",
+  "schemaRoot": "api://schemas/foundation_coze.loop.foundation.user",
+  "service": "foundationUser"
+});
+export const OAuthGiteeAuthorize = /*#__PURE__*/createAPI<OAuthGiteeAuthorizeRequest, OAuthGiteeAuthorizeResponse>({
+  "url": "/api/foundation/v1/oauth/gitee/authorize",
+  "method": "GET",
+  "name": "OAuthGiteeAuthorize",
+  "reqType": "OAuthGiteeAuthorizeRequest",
+  "reqMapping": {
+  },
+  "resType": "OAuthGiteeAuthorizeResponse",
   "schemaRoot": "api://schemas/foundation_coze.loop.foundation.user",
   "service": "foundationUser"
 });

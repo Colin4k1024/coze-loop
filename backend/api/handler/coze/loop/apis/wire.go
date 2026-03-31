@@ -64,6 +64,11 @@ var (
 		wire.Bind(new(authservice.Client), new(*loauth.LocalAuthService)),
 		loauth.NewLocalAuthService,
 	)
+
+	oauthSet = wire.NewSet(
+		foundationapp.InitOAuthApplication,
+	)
+)
 	llmSet = wire.NewSet(
 		NewLLMHandler,
 		llmapp.InitManageApplication,
@@ -228,6 +233,17 @@ func InitObservabilityHandler(
 ) (*ObservabilityHandler, error) {
 	wire.Build(
 		observabilitySet,
+	)
+	return nil, nil
+}
+
+func InitOAuthHandler(
+	idgen idgen.IIDGenerator,
+	db db.Provider,
+	configFactory conf.IConfigLoaderFactory,
+) (*FoundationOAuthService, error) {
+	wire.Build(
+		oauthSet,
 	)
 	return nil, nil
 }

@@ -65,6 +65,12 @@ var (
 		NewFoundationOpenAPIApplication,
 		auth2.NewAuthProvider,
 	)
+
+	oauthSet = wire.NewSet(
+		NewOAuthApplication,
+		mysql.NewLoginAuditDAOImpl,
+		userDomainSet,
+	)
 )
 
 func InitAuthApplication(idgen idgen.IIDGenerator,
@@ -112,5 +118,14 @@ func InitFoundationOpenAPIApplication(
 	authClient authservice.Client,
 ) (openapi.FoundationOpenAPIService, error) {
 	wire.Build(openAPISet)
+	return nil, nil
+}
+
+func InitOAuthApplication(
+	idgen idgen.IIDGenerator,
+	db db.Provider,
+	configFactory conf.IConfigLoaderFactory,
+) (*OAuthApplication, error) {
+	wire.Build(oauthSet)
 	return nil, nil
 }

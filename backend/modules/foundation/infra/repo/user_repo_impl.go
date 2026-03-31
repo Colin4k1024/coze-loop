@@ -224,6 +224,36 @@ func (u UserRepoImpl) CheckEmailExist(ctx context.Context, email string) (bool, 
 	return true, nil
 }
 
+func (u UserRepoImpl) FindByGiteeID(ctx context.Context, giteeID string) (*entity.User, error) {
+	if giteeID == "" {
+		return nil, errorx.New("UserRepoImpl.FindByGiteeID invalid param: giteeID is empty")
+	}
+
+	userPO, err := u.userDao.FindByGiteeID(ctx, giteeID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, errorx.WrapByCode(err, errno.CommonMySqlErrorCode, errorx.WithExtraMsg("userDao.FindByGiteeID error"))
+	}
+	return convertor.UserPO2DO(userPO), nil
+}
+
+func (u UserRepoImpl) UpdateGiteeID(ctx context.Context, userID int64, giteeID string) error {
+	if userID <= 0 || giteeID == "" {
+		return errorx.New("UserRepoImpl.UpdateGiteeID invalid param")
+	}
+
+	q := query.Use(u.db.NewSession(ctx))
+	err := u.userDao.Update(ctx, userID, map[string]interface{}{
+		q.User.GiteeID.ColumnName().String(): giteeID,
+	})
+	if err != nil {
+		return errorx.WrapByCode(err, errno.CommonMySqlErrorCode, errorx.WithExtraMsg("userDao.UpdateGiteeID error"))
+	}
+	return nil
+}
+
 func (u UserRepoImpl) UpdateProfile(ctx context.Context, userID int64, param *repo.UpdateProfileParam) (*entity.User, error) {
 	if param == nil || userID <= 0 {
 		return nil, errorx.New("UserRepoImpl.UpdateProfile invalid param")

@@ -22,6 +22,7 @@ type User struct {
 	UserVerified bool      `gorm:"column:user_verified;type:tinyint(1);not null;comment:User Verification Status" json:"user_verified"`                              // User Verification Status
 	CountryCode  int64     `gorm:"column:country_code;type:bigint(20);not null;comment:Country Code" json:"country_code"`                                            // Country Code
 	SessionKey   string    `gorm:"column:session_key;type:varchar(512);not null;index:idx_session_key,priority:1;comment:Session Key" json:"session_key"`            // Session Key
+	GiteeID     string    `gorm:"column:gitee_id;type:varchar(64);uniqueIndex;comment:Gitee OAuth ID" json:"gitee_id"`                                            // Gitee OAuth ID
 	DeletedAt    int64     `gorm:"column:deleted_at;type:bigint(20);not null;comment:删除时间" json:"deleted_at"`                                                        // 删除时间
 	CreatedAt    time.Time `gorm:"column:created_at;type:datetime;not null;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"`                                // 创建时间
 	UpdatedAt    time.Time `gorm:"column:updated_at;type:datetime;not null;default:CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"`                                // 更新时间

@@ -101,6 +101,16 @@ struct MGetUserInfoResponse {
     255: base.BaseResp  BaseResp
 }
 
+struct OAuthGiteeAuthorizeRequest {
+    255: optional base.Base Base
+}
+
+struct OAuthGiteeAuthorizeResponse {
+    1: optional string authorize_url
+
+    255: optional base.BaseResp  BaseResp
+}
+
 service UserService {
     // 用户注册相关接口
     UserRegisterResponse Register(1: UserRegisterRequest request) (api.post = "/api/foundation/v1/users/register")
@@ -109,6 +119,7 @@ service UserService {
     // 用户登陆相关接口
     LoginByPasswordResponse LoginByPassword(1: LoginByPasswordRequest request) (api.post = "/api/foundation/v1/users/login_by_password")
     LogoutResponse Logout(1: LogoutRequest request) (api.post = "/api/foundation/v1/users/logout")
+    OAuthGiteeAuthorizeResponse OAuthGiteeAuthorize(1: OAuthGiteeAuthorizeRequest request) (api.get = "/api/foundation/v1/oauth/gitee/authorize")
 
     // 修改用户资料相关接口
     ModifyUserProfileResponse ModifyUserProfile(1: ModifyUserProfileRequest request) (api.put = "/api/foundation/v1/users/:user_id/update_profile")

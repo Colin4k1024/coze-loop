@@ -1,0 +1,16 @@
+# Foundation module configuration
+
+# User registration control
+user_register_control:
+  block: false
+  allowed_emails: ""
+
+# OAuth configuration
+oauth:
+  gitee:
+    enabled: true
+    client_id: "${GITEE_CLIENT_ID}"
+    client_secret: "${GITEE_CLIENT_SECRET}"
+    redirect_uri: "/api/foundation/v1/oauth/gitee/callback"
+    scopes:
+      - "user_info"

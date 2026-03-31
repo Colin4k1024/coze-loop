@@ -24,6 +24,7 @@ func UserDO2PO(do *entity.User) *model.User {
 		UserVerified: do.UserVerified,
 		CountryCode:  do.CountryCode,
 		SessionKey:   do.SessionKey,
+		GiteeID:     do.GiteeID,
 		DeletedAt:    0,
 		CreatedAt:    do.CreatedAt,
 		UpdatedAt:    do.UpdatedAt,
@@ -47,6 +48,7 @@ func UserPO2DO(po *model.User) *entity.User {
 		UserVerified: po.UserVerified,
 		CountryCode:  po.CountryCode,
 		SessionKey:   po.SessionKey,
+		GiteeID:     po.GiteeID,
 		CreatedAt:    po.CreatedAt,
 		UpdatedAt:    po.UpdatedAt,
 	}

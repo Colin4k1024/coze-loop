@@ -20,6 +20,7 @@ type IUserDAO interface {
 	MGetByIDs(ctx context.Context, userIDs []int64, opts ...db.Option) ([]*model.User, error)
 	FindByEmail(ctx context.Context, email string, opts ...db.Option) (*model.User, error)
 	FindByUniqueName(ctx context.Context, uniqueName string, opts ...db.Option) (*model.User, error)
+	FindByGiteeID(ctx context.Context, giteeID string, opts ...db.Option) (*model.User, error)
 
 	Update(ctx context.Context, userID int64, updates map[string]interface{}, opts ...db.Option) error
 }
@@ -58,6 +59,14 @@ func (dao *UserDAOImpl) FindByEmail(ctx context.Context, email string, opts ...d
 
 	return dao.query.User.WithContext(ctx).Where(
 		dao.query.User.Email.Eq(email),
+	).First()
+}
+
+func (dao *UserDAOImpl) FindByGiteeID(ctx context.Context, giteeID string, opts ...db.Option) (*model.User, error) {
+	dao.query = query.Use(dao.db.NewSession(ctx, opts...))
+
+	return dao.query.User.WithContext(ctx).Where(
+		dao.query.User.GiteeID.Eq(giteeID),
 	).First()
 }
 

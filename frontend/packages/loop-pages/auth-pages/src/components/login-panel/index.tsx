@@ -7,6 +7,8 @@ import { Input, Button, Typography } from '@coze-arch/coze-design';
 
 import loopBanner from '@/assets/loop-banner.png';
 import { ReactComponent as IconGithub } from '@/assets/github.svg';
+import { ReactComponent as IconGitee } from '@/assets/gitee.svg';
+import { userService } from '@cozeloop/account/services/user-service';
 
 import { SwitchLang } from '../switch-lng';
 
@@ -32,6 +34,14 @@ export function LoginPanel({ loading, onLogin, onRegister }: Props) {
 
   const onClickLogin = () => {
     onLogin?.(email, password);
+  };
+
+  const onClickGiteeLogin = async () => {
+    try {
+      await userService.loginByGitee();
+    } catch (error) {
+      console.error('Gitee login failed:', error);
+    }
   };
 
   return (
@@ -74,6 +84,17 @@ export function LoginPanel({ loading, onLogin, onRegister }: Props) {
             loading={loading}
           >
             {I18n.t('login')}
+          </Button>
+        </div>
+        <div className="mt-[20px]">
+          <Button
+            className="w-full flex items-center justify-center gap-[8px]"
+            disabled={loading}
+            onClick={onClickGiteeLogin}
+            style={{ backgroundColor: '#C71D23', borderColor: '#C71D23', color: '#FFFFFF' }}
+          >
+            <IconGitee className="w-[16px] h-[16px]" />
+            {I18n.t('login_with_gitee') || 'Login with Gitee'}
           </Button>
         </div>
         {/* <div className="mt-[20px] flex">

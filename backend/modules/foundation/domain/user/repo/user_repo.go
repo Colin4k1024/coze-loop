@@ -15,6 +15,8 @@ type IUserRepo interface {
 	GetUserByID(ctx context.Context, userID int64) (*entity.User, error)
 	MGetUserByIDs(ctx context.Context, userIDs []int64) ([]*entity.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*entity.User, error)
+	FindByGiteeID(ctx context.Context, giteeID string) (*entity.User, error)
+	UpdateGiteeID(ctx context.Context, userID int64, giteeID string) error
 
 	UpdateSessionKey(ctx context.Context, userID int64, sessionKey string) error
 	ClearSessionKey(ctx context.Context, userID int64) error

@@ -18,10 +18,16 @@ type: project
 
 ## 当前任务
 
-- **slug**: `project-docs-organization`
-- **目标**: 梳理整个项目的设计文档体系（前端 + 后端 + 使用文档）
-- **范围**: docs/ 目录结构、架构文档、使用指南；不做代码修改
-- **状态**: 已完成（/team-intake → /team-plan → /team-execute → /team-review → /team-release）
+- **slug**: `open-platform-login`
+- **目标**: 集成 Gitee OAuth 登录能力
+- **范围**: Gitee OAuth 登录 + 新用户自动注册（developer 角色）+ 登录日志审计
+- **状态**: /team-intake + /team-plan 完成，待 /team-execute
+
+## 新增活跃风险
+
+- Gitee OAuth 集成需要新增 `gitee_id` 字段到 User 模型
+- 现有登录日志（login_audit）表和写入逻辑需要新建
+- 需确保 OAuth 回调与现有 session middleware 兼容
 
 ## 最近发布
 

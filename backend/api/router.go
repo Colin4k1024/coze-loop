@@ -8,12 +8,19 @@ package api
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 
-	handler "github.com/coze-dev/coze-loop/backend/api/handler"
+	"github.com/coze-dev/coze-loop/backend/api/handler"
+	apis "github.com/coze-dev/coze-loop/backend/api/handler/coze/loop/apis"
 )
 
 // customizeRegister registers customize routers.
 func customizedRegister(r *server.Hertz) {
 	r.GET("/ping", handler.Ping)
+
+	// OAuth routes
+	if apis.OAuthHandler != nil {
+		r.GET("/api/foundation/v1/oauth/gitee/authorize", apis.OAuthHandler.GiteeAuthorize)
+		r.GET("/api/foundation/v1/oauth/gitee/callback", apis.OAuthHandler.GiteeCallback)
+	}
 
 	// your code ...
 }

@@ -20,6 +20,7 @@ type User struct {
 	UserVerified bool   // 用户是否已验证
 	CountryCode  int64  // 国家代码
 	SessionKey   string // 会话密钥
+	GiteeID     string // Gitee第三方登录ID
 
 	CreatedAt time.Time // 创建时间
 	UpdatedAt time.Time // 更新时间

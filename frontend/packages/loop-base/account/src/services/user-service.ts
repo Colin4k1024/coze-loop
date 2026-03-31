@@ -32,6 +32,10 @@ export const userService = (() => ({
 
     return resp;
   },
+  async loginByGitee(): Promise<void> {
+    const resp = await FoundationApi.OAuthGiteeAuthorize({});
+    window.location.href = resp.authorize_url ?? '/';
+  },
   async logout(token?: string) {
     await FoundationApi.Logout({ token });
   },
