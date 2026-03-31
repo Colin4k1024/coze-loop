@@ -1,3 +1,13 @@
 user_register_control:
   block: false
   allowed_emails: "locala@doamin;localb@domain"
+
+# Gitee OAuth Configuration
+oauth:
+  gitee:
+    enabled: false
+    client_id: "${GITEE_CLIENT_ID}"
+    client_secret: "${GITEE_CLIENT_SECRET}"
+    redirect_uri: "http://localhost:8080/api/foundation/v1/oauth/gitee/callback"
+    scopes:
+      - "user_info"

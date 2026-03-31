@@ -208,4 +208,7 @@ var (
 	observabilitySet = wire.NewSet(
 		NewObservabilityHandler, application6.InitTraceApplication, application6.InitTraceIngestionApplication, application6.InitOpenAPIApplication, application6.InitTaskApplication, application6.InitMetricApplication,
 	)
+	oauthSet = wire.NewSet(
+		application.InitOAuthApplication,
+	)
 )

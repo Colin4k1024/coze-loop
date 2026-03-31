@@ -60,7 +60,10 @@ func (s *FoundationOAuthService) GiteeAuthorize(ctx context.Context, c *app.Requ
 		state,
 	)
 
-	c.Redirect(http.StatusFound, []byte(authorizeURL))
+	// Return the authorize URL for the frontend to redirect
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"authorize_url": authorizeURL,
+	})
 }
 
 // GiteeCallback handles GET /api/foundation/v1/oauth/gitee/callback

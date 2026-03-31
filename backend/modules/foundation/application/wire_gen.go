@@ -7,6 +7,8 @@
 package application
 
 import (
+	"context"
+
 	"github.com/coze-dev/coze-loop/backend/infra/db"
 	"github.com/coze-dev/coze-loop/backend/infra/fileserver"
 	"github.com/coze-dev/coze-loop/backend/infra/idgen"
@@ -80,6 +82,43 @@ func InitFoundationOpenAPIApplication(objectStorage fileserver.BatchObjectStorag
 	return foundationOpenAPIService, nil
 }
 
+func InitOAuthApplication(idgen2 idgen.IIDGenerator, db2 db.Provider, configFactory conf.IConfigLoaderFactory) (*OAuthApplication, error) {
+	iUserDAO := mysql.NewUserDAOImpl(db2)
+	iSpaceDAO := mysql.NewSpaceDAOImpl(db2)
+	iSpaceUserDAO := mysql.NewSpaceUserDAOImpl(db2)
+	iUserRepo := repo.NewUserRepo(db2, idgen2, iUserDAO, iSpaceDAO, iSpaceUserDAO)
+	iGiteeOAuthService := service.NewGiteeOAuthService(iUserRepo, idgen2, &oauthConfigProvider{configFactory: configFactory})
+	iLoginAuditDAO := mysql.NewLoginAuditDAOImpl(db2)
+	oauthApplication := NewOAuthApplication(iGiteeOAuthService, iLoginAuditDAO, configFactory)
+	return oauthApplication, nil
+}
+
+type oauthConfigProvider struct {
+	configFactory conf.IConfigLoaderFactory
+}
+
+func (p *oauthConfigProvider) GetGiteeConfig(ctx context.Context) *service.OAuthGiteeConfig {
+	if p.configFactory == nil {
+		return nil
+	}
+	loader, err := p.configFactory.NewConfigLoader("foundation.yaml")
+	if err != nil {
+		return nil
+	}
+	const keyOAuthGitee = "oauth.gitee"
+	var config OAuthConfig
+	if err := loader.UnmarshalKey(ctx, keyOAuthGitee, &config); err != nil {
+		return nil
+	}
+	return &service.OAuthGiteeConfig{
+		Enabled:      config.Enabled,
+		ClientID:     config.ClientID,
+		ClientSecret: config.ClientSecret,
+		RedirectURI:  config.RedirectURI,
+		Scopes:       config.Scopes,
+	}
+}
+
 // wire.go:
 
 var (
@@ -111,4 +150,16 @@ var (
 	openAPISet = wire.NewSet(
 		NewFoundationOpenAPIApplication, auth2.NewAuthProvider,
 	)
+
+	oauthSet = wire.NewSet(
+		NewOAuthApplication,
+		newOAuthConfigProvider,
+		service.NewGiteeOAuthService,
+		mysql.NewLoginAuditDAOImpl,
+		userDomainSet,
+	)
 )
+
+func newOAuthConfigProvider(configFactory conf.IConfigLoaderFactory) service.OAuthConfigProvider {
+	return &oauthConfigProvider{configFactory: configFactory}
+}
