@@ -80,7 +80,7 @@ func (s *FoundationOAuthService) GiteeCallback(ctx context.Context, c *app.Reque
 		return
 	}
 
-	userID, sessionKey, err := s.oauthApp.LoginByGitee(ctx, code, state)
+	_, sessionKey, err := s.oauthApp.LoginByGitee(ctx, code, state)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, map[string]interface{}{
 			"code":    401,
@@ -99,8 +99,8 @@ func (s *FoundationOAuthService) GiteeCallback(ctx context.Context, c *app.Reque
 		false,
 		true)
 
-	// Redirect to frontend with user_id as query param
-	frontendURL := fmt.Sprintf("/#/oauth/callback?user_id=%d", userID)
+	// Redirect to frontend home page
+	frontendURL := "/"
 	c.Redirect(http.StatusFound, []byte(frontendURL))
 }
 
